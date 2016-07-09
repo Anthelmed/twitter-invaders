@@ -2,6 +2,7 @@
 import express from 'express';
 import Twit from 'twit';
 import http from 'http';
+import tracks from './config/tracks.json';
 import webpack from 'webpack';
 import history from 'connect-history-api-fallback';
 import portNumber from 'port-number';
@@ -30,7 +31,10 @@ const T = new Twit({
 });
 
 //Stream using twitter tracks and Socket io
-var stream = T.stream('statuses/filter', { track: '#apple' });
+let trackList = tracks.map(function(item) {
+    return item['track'];
+});
+let stream = T.stream('statuses/filter', { track: trackList });
 
 io.on('connection', (socket) => {
     stream.on('tweet', function (tweet) {
@@ -40,8 +44,9 @@ io.on('connection', (socket) => {
 
 server.listen(3000);
 
-app.use( history() );
+app.use(history());
 
+//Webpack
 if( isDeveloping ) {
 
     const compiler = webpack( devConfig );
@@ -67,9 +72,7 @@ if( isDeveloping ) {
 
     // Serve pure static assets
     app.use( express.static( './static' ) );
-
 } else {
-
     app.use( express.static( __dirname + '/dist' ) );
 }
 
