@@ -68,9 +68,6 @@ export default {
       '__DEV__': JSON.stringify(false),
       '__PROD__': JSON.stringify(true)
     }),
-    new webpack.ProvidePlugin({
-      'Vue': 'vue'
-    }),
     new CopyWebpackPlugin([
           { from: 'static' }
         ],
