@@ -62,6 +62,11 @@ class Tweet {
     //Mechanics
     //////////
     update() {
+        this.mask.x += this.vx;
+        this.mask.y += this.vy;
+        this.sprite.x += this.vx;
+        this.sprite.y += this.vy;
+
         if(this.exploding) {
             this.lives -= 1;
             this.sprite.alpha = map(this.lives, 10, 100, 0, 1);

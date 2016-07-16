@@ -15,6 +15,7 @@ class App {
         this.margin = window.innerWidth * 0.25;
 
         this.score = 0;
+        this.direction = 'right';
         this.tweetSize = getSize(this.windowWidth, 500, 300);
         this.matrixGutter = this.tweetSize.width / 6;
         this.gameMatrix = [];
@@ -104,6 +105,13 @@ class App {
     //////////
     gameLoop() {
         requestAnimationFrame(::this.gameLoop);
+        this.direction = (new Date().getSeconds() < 30) ? 'right' : 'left';
+
+        if(this.direction == 'right') {
+            this.stage.x += 0.1;
+        } else {
+            this.stage.x -= 0.1;
+        }
 
         for (let m = 0; m < this.gameMatrix.length; m++) {
             let tweet = this.gameMatrix[m];

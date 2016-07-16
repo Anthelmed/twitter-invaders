@@ -40,7 +40,6 @@ class Text {
 
     initText() {
         let index = randomIntFromInterval(0,colors.length-1);
-        console.log(index);
         let color = colors[index];
         let fontSize = randomIntFromInterval(16,24);
         this.text = new PIXI.Text(this.word, {font: fontSize + 'px Arial', fill: color, align: 'center'});
