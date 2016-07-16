@@ -28,7 +28,6 @@ class App {
         this.renderer = null;
 
         this.loadAssets();
-        this.addListeners();
     }
 
     //////////
@@ -66,6 +65,7 @@ class App {
 
         document.body.appendChild(this.renderer.view);
         this.gameLoop();
+        this.addListeners();
     }
 
     //////////

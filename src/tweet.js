@@ -62,10 +62,12 @@ class Tweet {
     //Mechanics
     //////////
     update() {
-        this.mask.x += this.vx;
-        this.mask.y += this.vy;
-        this.sprite.x += this.vx;
-        this.sprite.y += this.vy;
+        if(this.mask && this.sprite) {
+            this.mask.x += this.vx;
+            this.mask.y += this.vy;
+            this.sprite.x += this.vx;
+            this.sprite.y += this.vy;
+        }
 
         if(this.exploding) {
             this.lives -= 1;
@@ -78,23 +80,27 @@ class Tweet {
     }
 
     resize() {
-        this.mask.width = this.width;
-        this.mask.height = this.height;
-        this.mask.x = this.x;
-        this.mask.y = this.y;
-        this.sprite.width = this.width;
-        this.sprite.height = this.height;
-        this.sprite.x = this.x;
-        this.sprite.y = this.y;
+        if(this.mask && this.sprite) {
+            this.mask.width = this.width;
+            this.mask.height = this.height;
+            this.mask.x = this.x;
+            this.mask.y = this.y;
+            this.sprite.width = this.width;
+            this.sprite.height = this.height;
+            this.sprite.x = this.x;
+            this.sprite.y = this.y;
+        }
     }
 
     explode() {
         this.exploding = true;
         let words = this.tweet.text.split(' ');
-
+        let colorIndex = randomIntFromInterval(0,15);
+        
         for (let word of words) {
             let props = {
                 word: word,
+                colorIndex: colorIndex,
                 x: this.x + this.width / 2,
                 y: this.y + this.height / 2,
             };

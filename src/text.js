@@ -24,6 +24,7 @@ class Text {
     constructor(props, stage) {
         this.stage = stage;
         this.word = props.word;
+        this.color = colors[props.colorIndex];
         this.text = null;
         this.lives = randomIntFromInterval(10,100);
 
@@ -39,10 +40,8 @@ class Text {
     }
 
     initText() {
-        let index = randomIntFromInterval(0,colors.length-1);
-        let color = colors[index];
         let fontSize = randomIntFromInterval(16,24);
-        this.text = new PIXI.Text(this.word, {font: fontSize + 'px Arial', fill: color, align: 'center'});
+        this.text = new PIXI.Text(this.word, {font: fontSize + 'px Sarala', fill: this.color, align: 'center'});
 
         this.text.x = this.x;
         this.text.y = this.y;
