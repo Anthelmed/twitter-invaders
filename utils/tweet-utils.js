@@ -1,7 +1,7 @@
-function getPosition(matrix, column, width, height, gutter) {
+function getPosition(matrixLength, column, width, height, gutter) {
     let position = {x: 0, y: 0};
 
-    for (let m = 0; m < matrix.length; m++) {
+    for (let m = 0; m < matrixLength; m++) {
         if((m + 1) % column !== 0 || m == 0) {
             position.x += width + gutter;
         } else {

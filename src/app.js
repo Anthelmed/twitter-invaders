@@ -11,10 +11,10 @@ class App {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
 
-        this.matrixRow = 5;
-        this.matrixColumn = 10;
+        this.matrixRow = 3;
+        this.matrixColumn = 5;
         this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
-        this.matrixGutter = this.tweetSize.width / this.matrixColumn;
+        this.matrixGutter = this.tweetSize.width / (this.matrixColumn - 2);
         this.gameMatrix = [];
 
         //Alias
@@ -33,12 +33,7 @@ class App {
     loadAssets() {
         this.loader
             .add('mask', 'assets/images/twitter-logo.png')
-            .on("progress", this.loadProgressHandler)
             .load(::this.initGame);
-    }
-
-    loadProgressHandler() {
-        console.log("loading");
     }
 
     //////////
@@ -55,8 +50,11 @@ class App {
         this.gameLoop();
     }
 
+    //////////
+    //Tweets function
+    //////////
     addTweet(tweet) {
-        let position = getPosition(this.gameMatrix, this.matrixColumn, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
+        let position = getPosition(this.gameMatrix.length, this.matrixColumn, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
         let props = {
             id: this.gameMatrix.length + 1,
@@ -71,9 +69,30 @@ class App {
         this.gameMatrix.push(newTweet);
     }
 
+    resizeTweet() {
+        this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
+        this.matrixGutter = this.tweetSize.width / (this.matrixColumn - 2);
+
+        for (let m = 0; m < this.gameMatrix.length; m++) {
+            let tweet = this.gameMatrix[m];
+            let position = getPosition(m, this.matrixColumn, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
+
+            tweet.width = this.tweetSize.width;
+            tweet.height = this.tweetSize.height;
+            tweet.x = position.x;
+            tweet.y = position.y;
+
+            tweet.resize();
+        }
+    }
+
+    //////////
+    //Mechanics
+    //////////
     gameLoop() {
         requestAnimationFrame(::this.gameLoop);
 
+        this.renderer.render(this.stage);
         this.renderer.render(this.stage);
     }
 
@@ -84,6 +103,7 @@ class App {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
         this.renderer.resize(this.windowWidth, this.windowHeight);
+        this.resizeTweet();
     }
 
     addListeners() {
