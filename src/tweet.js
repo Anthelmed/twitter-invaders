@@ -81,7 +81,9 @@ class Tweet {
         this.explode();
         setTimeout(() => {
             this.alive = false;
-        }, 1000);
+            this.stage.removeChild(this.mask);
+            this.stage.removeChild(this.sprite);
+        }, 500);
     }
 
     addListeners() {

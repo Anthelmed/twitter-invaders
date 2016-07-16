@@ -4,17 +4,20 @@ import io from 'socket.io-client';
 import Tweet from './tweet';
 import { getSize, getPosition } from '../utils/tweet-utils';
 
+const pointsByTweet = 10;
+
 class App {
     constructor() {
         this.socket = io.connect('127.0.0.1:3000', { reconnect: true });
 
-        this.windowWidth = window.innerWidth;
+        this.windowWidth = window.innerWidth * 0.5;
         this.windowHeight = window.innerHeight;
 
-        this.matrixRow = 3;
-        this.matrixColumn = 5;
+        this.score = 0;
+        this.matrixRow = 5;
+        this.matrixColumn = 10;
         this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
-        this.matrixGutter = this.tweetSize.width / (this.matrixColumn - 2);
+        this.matrixGutter = this.tweetSize.width / 4;
         this.gameMatrix = [];
 
         //Alias
@@ -71,7 +74,7 @@ class App {
 
     resetTweetProperties() {
         this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
-        this.matrixGutter = this.tweetSize.width / (this.matrixColumn - 2);
+        this.matrixGutter = this.tweetSize.width / 4;
 
         for (let m = 0; m < this.gameMatrix.length; m++) {
             let tweet = this.gameMatrix[m];
@@ -98,11 +101,18 @@ class App {
             if(!tweet.alive) {
                 this.gameMatrix.splice(m, 1);
                 this.resetTweetProperties();
+                this.updateScore();
             }
         }
 
         this.renderer.render(this.stage);
         this.renderer.render(this.stage);
+    }
+
+    updateScore() {
+        this.score += pointsByTweet;
+
+        document.querySelector('h2 .points').innerHTML = this.score;
     }
 
     //////////

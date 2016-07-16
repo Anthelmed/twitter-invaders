@@ -16,7 +16,7 @@ function getSize(windowWidth, twitteWidth, twitteHeight, column) {
     let size = {width: 0, height: 0};
     let ratio = twitteWidth / twitteHeight;
 
-    size.width = windowWidth / (column + 2);
+    size.width = windowWidth / (column * 2);
     size.height = size.width * ratio;
 
     return size
