@@ -1,8 +1,8 @@
 import PIXI from 'pixi.js';
 import io from 'socket.io-client';
 
-import Twitte from './twitte';
-import { getSize, getPosition } from '../utils/twitte-utils';
+import Tweet from './tweet';
+import { getSize, getPosition } from '../utils/tweet-utils';
 
 class App {
     constructor() {
@@ -13,8 +13,8 @@ class App {
 
         this.matrixRow = 5;
         this.matrixColumn = 10;
-        this.twitteSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
-        this.matrixGutter = this.twitteSize.width / 4;
+        this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
+        this.matrixGutter = this.tweetSize.width / this.matrixColumn;
         this.gameMatrix = [];
 
         //Alias
@@ -32,7 +32,7 @@ class App {
     //////////
     loadAssets() {
         this.loader
-            .add('twitte', 'assets/images/twitter.png')
+            .add('mask', 'assets/images/twitter-logo.png')
             .on("progress", this.loadProgressHandler)
             .load(::this.initGame);
     }
@@ -46,28 +46,29 @@ class App {
     //////////
     initGame() {
         this.stage = new PIXI.Container();
-        this.renderer = PIXI.autoDetectRenderer(
+        this.renderer = new PIXI.WebGLRenderer(
             this.windowWidth, this.windowHeight,
-            {antialias: true, transparent: true, resolution: 1}
+            {antialias: true, transparent: true}
         );
 
         document.body.appendChild(this.renderer.view);
         this.gameLoop();
     }
 
-    addTwitte(tweet) {
-        let position = getPosition(this.gameMatrix, this.matrixColumn, this.twitteSize.width, this.twitteSize.height, this.matrixGutter);
+    addTweet(tweet) {
+        let position = getPosition(this.gameMatrix, this.matrixColumn, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
         let props = {
-            width: this.twitteSize.width,
-            height: this.twitteSize.height,
+            id: this.gameMatrix.length + 1,
+            width: this.tweetSize.width,
+            height: this.tweetSize.height,
             x: position.x,
             y: position.y,
             vx: 0,
             vy: 0
         };
-        let twitte = new Twitte(props, tweet, this.stage, this.resources);
-        this.gameMatrix.push(twitte);
+        let newTweet = new Tweet(props, tweet, this.stage, this.loader, this.resources);
+        this.gameMatrix.push(newTweet);
     }
 
     gameLoop() {
@@ -93,7 +94,7 @@ class App {
     onTweet() {
         this.socket.on('tweet', (tweet) => {
             if (this.gameMatrix.length < this.matrixRow * this.matrixColumn)
-                this.addTwitte(tweet);
+                this.addTweet(tweet);
         });
     }
 }
