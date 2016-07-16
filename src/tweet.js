@@ -1,21 +1,28 @@
 import PIXI from 'pixi.js';
 
+import Text from './text';
+
+import { randomIntFromInterval } from '../utils/math-utils';
+
 class Tweet {
-    constructor(props, tweet, stage, loader, resources) {
+    constructor(props, tweet, stage, loader, resources, explosions) {
         this.stage = stage;
         this.tweet = tweet;
         this.loader = loader;
         this.resources = resources;
+        this.explosions = explosions;
+
+        this.mask = null;
+        this.mask = null;
+        this.sprite = null;
 
         this.id = props.id;
-        this.alive = true;
+        this.exploding = false;
+        this.lives = randomIntFromInterval(10,100);
         this.width = props.width;
         this.height = props.height;
         this.x = props.x;
         this.y = props.y;
-
-        this.mask = null;
-        this.sprite = null;
 
         ::this.initSprite();
 
@@ -54,9 +61,15 @@ class Tweet {
     //////////
     //Mechanics
     //////////
-    move() {
-        this.sprite.x += this.vx;
-        this.sprite.y += this.vy;
+    update() {
+        if(this.exploding) {
+            this.lives -= 1;
+            this.sprite.alpha = map(this.lives, 10, 100, 0, 1);
+            if(this.lives <= 0) {
+                this.stage.removeChild(this.mask);
+                this.stage.removeChild(this.sprite);
+            }
+        }
     }
 
     resize() {
@@ -71,7 +84,22 @@ class Tweet {
     }
 
     explode() {
+        this.exploding = true;
+        let words = this.tweet.text.split(' ');
 
+        for (let word of words) {
+            let props = {
+                word: word,
+                lives: randomIntFromInterval(10,100),
+                x: this.x + this.width / 2,
+                y: this.y + this.height / 2,
+                vx: randomIntFromInterval(0.1,1),
+                vy: randomIntFromInterval(0.1,1),
+                rotation: randomIntFromInterval(0,360)
+            };
+
+            this.explosions.push(new Text(props, this.stage));
+        }
     }
 
     //////////
@@ -79,11 +107,6 @@ class Tweet {
     //////////
     handleClick() {
         this.explode();
-        setTimeout(() => {
-            this.alive = false;
-            this.stage.removeChild(this.mask);
-            this.stage.removeChild(this.sprite);
-        }, 500);
     }
 
     addListeners() {

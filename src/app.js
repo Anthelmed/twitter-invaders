@@ -10,13 +10,15 @@ class App {
     constructor() {
         this.socket = io.connect('127.0.0.1:3000', { reconnect: true });
 
-        this.windowWidth = window.innerWidth * 0.6;
+        this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
+        this.margin = window.innerWidth * 0.2;
 
         this.score = 0;
         this.tweetSize = getSize(this.windowWidth, 214, 264);
         this.matrixGutter = this.tweetSize.width / 4;
         this.gameMatrix = [];
+        this.explosions = [];
 
         //Alias
         this.loader = PIXI.loader;
@@ -55,7 +57,7 @@ class App {
     //Tweets function
     //////////
     addTweet(tweet) {
-        let position = getPosition(this.windowWidth, this.gameMatrix.length, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
+        let position = getPosition(this.windowWidth, this.margin, this.gameMatrix.length, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
         let props = {
             id: this.gameMatrix.length + 1,
@@ -66,7 +68,7 @@ class App {
             vx: 0,
             vy: 0
         };
-        let newTweet = new Tweet(props, tweet, this.stage, this.loader, this.resources);
+        let newTweet = new Tweet(props, tweet, this.stage, this.loader, this.resources, this.explosions);
         this.gameMatrix.push(newTweet);
     }
 
@@ -76,7 +78,7 @@ class App {
 
         for (let m = 0; m < this.gameMatrix.length; m++) {
             let tweet = this.gameMatrix[m];
-            let position = getPosition(this.windowWidth, m, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
+            let position = getPosition(this.windowWidth, this.margin, m, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
             tweet.width = this.tweetSize.width;
             tweet.height = this.tweetSize.height;
@@ -100,7 +102,14 @@ class App {
                 this.gameMatrix.splice(m, 1);
                 this.resetTweetProperties();
                 this.updateScore();
+            } else {
+                tweet.update();
             }
+
+        }
+
+        for(let explosion of this.explosions) {
+            explosion.update();
         }
 
         this.renderer.render(this.stage);
@@ -117,7 +126,7 @@ class App {
     //Listeners
     //////////
     onResize() {
-        this.windowWidth = window.innerWidth * 0.6;
+        this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
         this.renderer.resize(this.windowWidth, this.windowHeight);
         this.resetTweetProperties();
