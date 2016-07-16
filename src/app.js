@@ -69,7 +69,7 @@ class App {
         this.gameMatrix.push(newTweet);
     }
 
-    resizeTweet() {
+    resetTweetProperties() {
         this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
         this.matrixGutter = this.tweetSize.width / (this.matrixColumn - 2);
 
@@ -92,6 +92,15 @@ class App {
     gameLoop() {
         requestAnimationFrame(::this.gameLoop);
 
+        for (let m = 0; m < this.gameMatrix.length; m++) {
+            let tweet = this.gameMatrix[m];
+
+            if(!tweet.alive) {
+                this.gameMatrix.splice(m, 1);
+                this.resetTweetProperties();
+            }
+        }
+
         this.renderer.render(this.stage);
         this.renderer.render(this.stage);
     }
@@ -103,7 +112,7 @@ class App {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
         this.renderer.resize(this.windowWidth, this.windowHeight);
-        this.resizeTweet();
+        this.resetTweetProperties();
     }
 
     addListeners() {

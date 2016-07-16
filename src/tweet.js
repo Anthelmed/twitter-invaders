@@ -8,6 +8,7 @@ class Tweet {
         this.resources = resources;
 
         this.id = props.id;
+        this.alive = true;
         this.width = props.width;
         this.height = props.height;
         this.x = props.x;
@@ -16,7 +17,7 @@ class Tweet {
         this.mask = null;
         this.sprite = null;
 
-        this.initSprite();
+        ::this.initSprite();
 
         this.vx = props.vx;
         this.vy = props.vy;
@@ -26,7 +27,7 @@ class Tweet {
     //Init
     //////////
     initSprite() {
-        let imageName = 'image-' + this.id;
+        let imageName = 'image-' + Object.keys(this.resources).length + 1;
         let path = this.tweet.user.profile_image_url;
 
         this.mask = new PIXI.Sprite(
@@ -69,7 +70,23 @@ class Tweet {
         this.sprite.y = this.y;
     }
 
+    explode() {
 
+    }
+
+    //////////
+    //Listeners
+    //////////
+    handleClick() {
+        this.explode();
+        setTimeout(() => {
+            this.alive = false;
+        }, 1000);
+    }
+
+    addListeners() {
+        this.sprite.on('mousedown', ::this.handleClick);
+    }
 }
 
 export default Tweet
