@@ -1,8 +1,9 @@
-function getPosition(matrixLength, column, width, height, gutter) {
+function getPosition(windowWidth, matrixLength, width, height, gutter) {
     let position = {x: 0, y: 0};
+    let maxCol = Math.round(windowWidth / width);
 
     for (let m = 0; m < matrixLength; m++) {
-        if((m + 1) % column !== 0 || m == 0) {
+        if(m % maxCol !== 0 || m == 0) {
             position.x += width + gutter;
         } else {
             position.x = 0;
@@ -12,11 +13,11 @@ function getPosition(matrixLength, column, width, height, gutter) {
     return position;
 }
 
-function getSize(windowWidth, twitteWidth, twitteHeight, column) {
+function getSize(windowWidth, twitteWidth, twitteHeight) {
     let size = {width: 0, height: 0};
     let ratio = twitteWidth / twitteHeight;
 
-    size.width = windowWidth / (column * 2);
+    size.width = windowWidth / 10;
     size.height = size.width * ratio;
 
     return size

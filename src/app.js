@@ -10,13 +10,11 @@ class App {
     constructor() {
         this.socket = io.connect('127.0.0.1:3000', { reconnect: true });
 
-        this.windowWidth = window.innerWidth * 0.5;
+        this.windowWidth = window.innerWidth * 0.6;
         this.windowHeight = window.innerHeight;
 
         this.score = 0;
-        this.matrixRow = 5;
-        this.matrixColumn = 10;
-        this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
+        this.tweetSize = getSize(this.windowWidth, 214, 264);
         this.matrixGutter = this.tweetSize.width / 4;
         this.gameMatrix = [];
 
@@ -57,7 +55,7 @@ class App {
     //Tweets function
     //////////
     addTweet(tweet) {
-        let position = getPosition(this.gameMatrix.length, this.matrixColumn, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
+        let position = getPosition(this.windowWidth, this.gameMatrix.length, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
         let props = {
             id: this.gameMatrix.length + 1,
@@ -73,12 +71,12 @@ class App {
     }
 
     resetTweetProperties() {
-        this.tweetSize = getSize(this.windowWidth, 214, 264, this.matrixColumn);
+        this.tweetSize = getSize(this.windowWidth, 214, 264);
         this.matrixGutter = this.tweetSize.width / 4;
 
         for (let m = 0; m < this.gameMatrix.length; m++) {
             let tweet = this.gameMatrix[m];
-            let position = getPosition(m, this.matrixColumn, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
+            let position = getPosition(this.windowWidth, m, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
             tweet.width = this.tweetSize.width;
             tweet.height = this.tweetSize.height;
@@ -119,7 +117,7 @@ class App {
     //Listeners
     //////////
     onResize() {
-        this.windowWidth = window.innerWidth;
+        this.windowWidth = window.innerWidth * 0.6;
         this.windowHeight = window.innerHeight;
         this.renderer.resize(this.windowWidth, this.windowHeight);
         this.resetTweetProperties();
@@ -132,8 +130,7 @@ class App {
 
     onTweet() {
         this.socket.on('tweet', (tweet) => {
-            if (this.gameMatrix.length < this.matrixRow * this.matrixColumn)
-                this.addTweet(tweet);
+            this.addTweet(tweet);
         });
     }
 }
