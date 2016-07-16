@@ -1,18 +1,16 @@
 function getPosition(windowWidth, margin, matrixLength, width, height, gutter) {
     let position = {x: 0, y: 0};
-    let maxCol = Math.round((windowWidth * 0.6) / width);
+    let maxCol = Math.floor((windowWidth * 0.50) / width);
 
-    if(matrixLength !== 0) {
-        for (let m = 0; m < matrixLength; m++) {
-            if(m % maxCol !== 0 ) {
-                position.x += width + gutter;
-            } else {
-                position.x = margin;
-                position.y += height + gutter;
-            }
+    for (let m = 0; m < matrixLength + 1; m++) {
+        if(m == 0) {
+            position.x = margin;
+        } else if(m % maxCol !== 0) {
+            position.x += width + gutter;
+        } else {
+            position.x = margin;
+            position.y += height + gutter;
         }
-    } else {
-        position.x = margin;
     }
 
     return position;
@@ -23,7 +21,7 @@ function getSize(windowWidth, twitteWidth, twitteHeight) {
     let ratio = twitteWidth / twitteHeight;
 
     size.width = windowWidth * 0.6 / 10;
-    size.height = size.width * ratio;
+    size.height = size.width / ratio;
 
     return size
 }

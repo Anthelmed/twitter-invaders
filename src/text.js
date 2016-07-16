@@ -2,23 +2,39 @@ import PIXI from 'pixi.js';
 
 import { randomIntFromInterval, map } from '../utils/math-utils';
 
-const colors = [0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6,0x1dbfd6];
+const colors = [
+    0x1dbfd6,
+    0x8dc73f,
+    0xfcb815,
+    0xb59562,
+    0x78cf98,
+    0x8e2895,
+    0xf11d19,
+    0x42af52,
+    0xffdf00,
+    0x0074b6,
+    0xf30089,
+    0xe7e7e7,
+    0xf06426,
+    0xbf245e,
+    0x52318c,
+    0x41998d];
 
 class Text {
     constructor(props, stage) {
         this.stage = stage;
         this.word = props.word;
         this.text = null;
-        this.lives = props.lives;
+        this.lives = randomIntFromInterval(10,100);
 
         this.x = props.x;
         this.y = props.y;
-        this.rotation = props.rotation;
+        this.rotation = randomIntFromInterval(0,360);
 
         this.initText();
 
-        this.vx = props.vx;
-        this.vy = props.vy;
+        this.vx = randomIntFromInterval(0.1,1);
+        this.vy = randomIntFromInterval(0.1,1);
 
     }
 

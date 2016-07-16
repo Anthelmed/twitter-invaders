@@ -12,11 +12,11 @@ class App {
 
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
-        this.margin = window.innerWidth * 0.2;
+        this.margin = window.innerWidth * 0.25;
 
         this.score = 0;
-        this.tweetSize = getSize(this.windowWidth, 214, 264);
-        this.matrixGutter = this.tweetSize.width / 4;
+        this.tweetSize = getSize(this.windowWidth, 500, 300);
+        this.matrixGutter = this.tweetSize.width / 6;
         this.gameMatrix = [];
         this.explosions = [];
 
@@ -35,7 +35,21 @@ class App {
     //////////
     loadAssets() {
         this.loader
-            .add('mask', 'assets/images/twitter-logo.png')
+            .add('mask-1', 'assets/images/mask-1.png')
+            .add('mask-2', 'assets/images/mask-2.png')
+            .add('mask-3', 'assets/images/mask-3.png')
+            .add('mask-4', 'assets/images/mask-4.png')
+            .add('mask-5', 'assets/images/mask-5.png')
+            .add('mask-6', 'assets/images/mask-6.png')
+            .add('mask-7', 'assets/images/mask-7.png')
+            .add('mask-8', 'assets/images/mask-8.png')
+            .add('mask-9', 'assets/images/mask-9.png')
+            .add('mask-10', 'assets/images/mask-10.png')
+            .add('mask-11', 'assets/images/mask-11.png')
+            .add('mask-12', 'assets/images/mask-12.png')
+            .add('mask-13', 'assets/images/mask-13.png')
+            .add('mask-14', 'assets/images/mask-14.png')
+            .add('mask-15', 'assets/images/mask-15.png')
             .load(::this.initGame);
     }
 
@@ -60,7 +74,6 @@ class App {
         let position = getPosition(this.windowWidth, this.margin, this.gameMatrix.length, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
 
         let props = {
-            id: this.gameMatrix.length + 1,
             width: this.tweetSize.width,
             height: this.tweetSize.height,
             x: position.x,
@@ -73,9 +86,6 @@ class App {
     }
 
     resetTweetProperties() {
-        this.tweetSize = getSize(this.windowWidth, 214, 264);
-        this.matrixGutter = this.tweetSize.width / 4;
-
         for (let m = 0; m < this.gameMatrix.length; m++) {
             let tweet = this.gameMatrix[m];
             let position = getPosition(this.windowWidth, this.margin, m, this.tweetSize.width, this.tweetSize.height, this.matrixGutter);
@@ -98,7 +108,7 @@ class App {
         for (let m = 0; m < this.gameMatrix.length; m++) {
             let tweet = this.gameMatrix[m];
 
-            if(!tweet.alive) {
+            if(tweet.lives <= 0) {
                 this.gameMatrix.splice(m, 1);
                 this.resetTweetProperties();
                 this.updateScore();
@@ -128,6 +138,10 @@ class App {
     onResize() {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
+        this.margin = window.innerWidth * 0.25;
+        this.tweetSize = getSize(this.windowWidth, 500, 300);
+        this.matrixGutter = this.tweetSize.width / 6;
+
         this.renderer.resize(this.windowWidth, this.windowHeight);
         this.resetTweetProperties();
     }
