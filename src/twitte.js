@@ -1,29 +1,30 @@
 import PIXI from 'pixi.js';
 
 class Twitte {
-    constructor(props, stage, resources) {
-        //Init sprite
-        this.twitte = new PIXI.Sprite(
+    constructor(props, tweet, stage, resources) {
+        //Init Sprite
+        this.sprite = new PIXI.Sprite(
             resources.twitte.texture
         );
 
         //Sprite properties
-        this.twitte.width = props.width;
-        this.twitte.height = props.height;
-        this.twitte.x = props.x;
-        this.twitte.y = props.y;
-        this.twitte.x = 0.5;
-        this.twitte.y = 0.5;
+        this.sprite.width = props.width;
+        this.sprite.height = props.height;
+        this.sprite.x = props.x;
+        this.sprite.y = props.y;
 
+        this.tweet = tweet;
+        console.log(this.tweet);
+        console.log(this.sprite.x,this.sprite.y);
         this.vx = props.vx;
         this.vy = props.vy;
 
-        stage.addChild(this.twitte);
+        stage.addChild(this.sprite);
     }
 
     move() {
-        this.twitte.x += this.vx;
-        this.twitte.y += this.vy;
+        this.sprite.x += this.vx;
+        this.sprite.y += this.vy;
     }
 }
 
