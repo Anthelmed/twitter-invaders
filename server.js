@@ -3,6 +3,7 @@ import express from 'express';
 import Twit from 'twit';
 import http from 'http';
 import tracks from './config/tracks.json';
+import twitterApi from './config/twitter-api.json';
 import webpack from 'webpack';
 import history from 'connect-history-api-fallback';
 import portNumber from 'port-number';
@@ -23,10 +24,10 @@ const io = require('socket.io')(server);
 
 //Twitter Api
 const T = new Twit({
-    consumer_key:         'efrF4jmviXP13UdR0FhroUw9u',
-    consumer_secret:      'E1gwGuEcB1AyDc5WkowXpH3LSiAFxHGpB18y4t0tDU7C5nnSJu',
-    access_token:         '725371147324391429-iuVmH8ok7idKYYGEGhs2dW0mOXTNbYb',
-    access_token_secret:  'Sb13X2FiHCBTjwx8UC6yfzhWTxXZyypxkfm8Fdea8WvV9',
+    consumer_key:         twitterApi.consumer_key,
+    consumer_secret:      twitterApi.consumer_secret,
+    access_token:         twitterApi.access_token,
+    access_token_secret:  twitterApi.access_token_secret,
     timeout_ms:           60*1000  // optional HTTP request timeout to apply to all requests.
 });
 
