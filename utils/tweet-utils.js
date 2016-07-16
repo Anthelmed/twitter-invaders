@@ -1,5 +1,5 @@
 function getPosition(windowWidth, margin, matrixLength, width, height, gutter) {
-    let position = {x: 0, y: 0};
+    let position = {x: 0, y: height};
     let maxCol = Math.floor((windowWidth * 0.50) / width);
 
     for (let m = 0; m < matrixLength + 1; m++) {

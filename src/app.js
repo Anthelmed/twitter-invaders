@@ -105,12 +105,22 @@ class App {
     //////////
     gameLoop() {
         requestAnimationFrame(::this.gameLoop);
-        this.direction = (new Date().getSeconds() < 30) ? 'right' : 'left';
+        let seconds = new Date().getSeconds();
+        let minutes = new Date().getMinutes();
+
+        this.direction = (seconds < 30) ? 'right' : 'left';
 
         if(this.direction == 'right') {
             this.stage.x += 0.1;
         } else {
             this.stage.x -= 0.1;
+        }
+
+        if (seconds == 0 || seconds == 30) {
+            if(minutes % 5 == 0)
+                this.stage.y += 0.1; 
+            else
+                this.stage.y -= 0.1; 
         }
 
         for (let m = 0; m < this.gameMatrix.length; m++) {
