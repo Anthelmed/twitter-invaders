@@ -93,7 +93,15 @@ class Tweet {
     }
 
     explode() {
-        this.exploding = true;
+        if(!this.exploding) {
+            this.exploding = true;
+        
+            this.generateWords();
+            this.playKilledSound();
+        }
+    }
+
+    generateWords() {
         let words = this.tweet.text.split(' ');
         let colorIndex = randomIntFromInterval(0,15);
         
@@ -109,15 +117,22 @@ class Tweet {
         }
     }
 
+    playKilledSound() {
+        let audioElement = document.createElement('audio');
+
+        audioElement.setAttribute('src', 'assets/audios/tweetKilled.mp3');
+        audioElement.play();
+
+        setTimeout(() => {
+            audioElement.remove();
+        }, audioElement.duration);
+    }
+
     //////////
     //Listeners
     //////////
-    handleClick() {
-        this.explode();
-    }
-
     addListeners() {
-        this.sprite.on('mousedown', ::this.handleClick);
+        this.sprite.on('mousedown', ::this.explode);
     }
 }
 
